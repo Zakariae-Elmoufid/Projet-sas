@@ -8,6 +8,7 @@ struct DateNaissance{
     int mois;
     int annee;
 };
+// Structure pour représenter un étudiant avec diverses informations
 struct Etudiants{
   int Numero ;
   char Nom[30];
@@ -21,7 +22,7 @@ struct Etudiants etudiant[maxEtudiant];
 
 int count = 0;
 int repeat = 0;
-
+// Cette fonction permet d'ajouter des étudiants au tableau.
 void Ajouter(){
         encore:
     printf("Entrez le numero d'etudiant : ");
@@ -45,7 +46,7 @@ void Ajouter(){
 
     count++;
 
-     printf("vous voulez ajouter un autre contact? \n");
+     printf("vous voulez ajouter un autre etudiant? \n");
      printf("si oui tapez 1 sinon tapez 0 : ");
      scanf("%d",&repeat);
 
@@ -53,7 +54,7 @@ void Ajouter(){
         goto encore ;
 
 }
-
+// Fonction pour afficher les informations des étudiants
 void Afficher(){
     int i ;
 for (i=0;i<count;i++) {
@@ -66,7 +67,7 @@ for (i=0;i<count;i++) {
         printf("----------------------------\n");
     }
 }
-
+// Fonction pour modifier les informations d'un étudiant spécifique
 void Modifier(){
     int numeroUnique, i;
     int numero ;
@@ -110,7 +111,7 @@ void Modifier(){
     }
     printf("Cette etudiant n'existe pas");
 }
-
+// Fonction pour supprimer un étudiant du tableau
 void Supprimer(){
    int numeroUnique , i , j ;
     printf("Entrez le nomber d'etudiant s'il vous plait : ");
@@ -133,18 +134,18 @@ void Supprimer(){
     }
     printf("ne trouve pas cette numero");
 }
-
+// Fonction pour calculer la moyenne par département et dans l'université
 void CalculerDepartement(){
 
-  char departement[30];
-  float sommeD = 0;
-  float sommeU = 0 ;
-  int countEtudiant = 0 ;
+  char departement[30]; // Tableau pour stocker le nom du département saisi par l'utilisateur
+  float sommeD = 0;     // Somme des notes générales des étudiants du département choisi
+  float sommeU = 0 ;     // Somme des notes générales de tous les étudiants de l'université
+  int countEtudiant = 0 ; // Compteur du nombre d'étudiants dans le département choisi
   int i;
 
   printf("saisir departement que vous vollez savoir la note generle :");
   scanf("%s",departement);
-
+// Boucle pour parcourir tous les étudiants et vérifier leur département
   for(i=0;i<count;i++){
     if(strcasecmp(etudiant[i].Departement,departement)==0){
         sommeD = sommeD + etudiant[i].NoteGeneral;
@@ -161,80 +162,232 @@ void CalculerDepartement(){
 }
 
 //Statistique
-void Statistiques(){
 
-    printf("le nomber total d'etudians inscrits est %d .\n",count);
 //le nombre d'étudiants dans chaque département.
+void EtudiantDepartement(){
      int i ,j ;
-   char T[maxEtudiant][30];
+   char TDepartement[maxEtudiant][30]; //un tableau pour stocker les noms des départements trouvés.
    int copmare ;
-    int countE = 0 ;
+    int countD = 0 ;
 
 
 
    for(i=0;i<count;i++){
      copmare=1;
-     for( j=0;j<countE;j++){
-           if(strcasecmp(etudiant[i].Departement,T[j])==0) {
+     for( j=0;j<countD;j++){
+           if(strcasecmp(etudiant[i].Departement,TDepartement[j])==0) {
            copmare = 0;
            break;
            }
    }
      if(copmare){
-        strcpy(T[countE],etudiant[i].Departement);
-        countE++;
+        strcpy(TDepartement[countD],etudiant[i].Departement);
+        countD++;
      }
     }
 
-
-      for(i=0;i<countE;i++){
-     int countD = 0;
+      for(i=0;i<countD;i++){
+     int countE = 0;
         for(j=0;j<count;j++){
-            if(strcasecmp(T[i],etudiant[j].Departement)==0){
-                countD++;
+            if(strcasecmp(TDepartement[i],etudiant[j].Departement)==0){
+                countE++;
             }
         }
-        printf("--%s : %d\n",T[i],countD);
+        printf("\n");
+        printf("le nombre d'étudiants dans %s est %d\n",TDepartement[i],countE);
       }
-//les étudiants ayant une moyenne générale supérieure à un certain seuil.
+}
 
+//les étudiants ayant une moyenne générale supérieure à un certain seuil.
+void  MoyenneSeuil(){
+    int i ;
+        printf("\n");
         printf("les etudiants ayant une moyenne generale superieure a un certain seuil :\n");
    for(i=0;i<count;i++){
-    if(etudiant[i].NoteGeneral>=10){
-        printf("----%s %s : %.2f .\n",etudiant[i].Nom,etudiant[i].Prenom,etudiant[i].NoteGeneral);
-    }
+       if(etudiant[i].NoteGeneral >= 10 ){
+        printf("----%s ",etudiant[i].Nom);
+        printf(" %s :",etudiant[i].Prenom);
+        printf(" %.2f\n",etudiant[i].NoteGeneral);
+      }
    }
-//les 3 étudiants ayant les meilleures notes.
- int swap ;
+}
+//les 3 étudiants ayant les meilleures notes
+void MeilleuresNotes(){
+
+ int swap ,i ,j;
+ float TMeilleures[30];
+
+ for (i =0;i<count;i++) {
+        TMeilleures[i] = etudiant[i].NoteGeneral;
+    }
+
 for(i=0;i<count-1;i++){
-    for(j=0;j<count-i-1;j++){
-            if(etudiant[i].NoteGeneral<etudiant[j+1].NoteGeneral){
-        swap = etudiant[j].NoteGeneral;
-        etudiant[j].NoteGeneral = etudiant[j+1].NoteGeneral;
-        etudiant[j+1].NoteGeneral = swap ;
+    for(j=0;j<count-1;j++){
+            if(TMeilleures[j]<TMeilleures[j+1]){
+        swap = TMeilleures[j];
+        TMeilleures[j] = TMeilleures[j+1];
+        TMeilleures[j+1] = swap ;
+             }
+     }
+  }
+
+  for(i=0;i<3&&i<count;i++)
+    {
+        int compare = 0 ;
+        int index = 0 ;
+
+        for(j=0;j<count;j++){
+            if (TMeilleures[i] == etudiant[j].NoteGeneral)
+            {
+                compare = 1 ;
+                index = j ;
+                break;
+            }
+        }
+
+      if(compare)
+        printf("\n");
+        printf("------la note %d: %.2f \n",i+1,etudiant[index].NoteGeneral);
+        printf("-Numero: %d\n", etudiant[index].Numero);
+        printf("-Nom: %s\n", etudiant[index].Nom);
+        printf("-Prenom: %s\n", etudiant[index].Prenom);
+        printf("-Date de Naissance: %d/%d/%d\n",etudiant[index].date.jour,etudiant[index].date.jour,etudiant[index].date.jour);
+        printf("-Departement: %s\n", etudiant[index].Departement);
     }
+
+
+}
+
+//nombre d'étudiants ayant réussi dans chaque département
+void EtudiantReussiDepartement(){
+       int i ,j ;
+   char TDepartement[maxEtudiant][30]; //un tableau pour stocker les noms des départements trouvés.
+   int copmare ;
+    int countD = 0 ;
+
+   for(i=0;i<count;i++){
+     copmare=1;
+     for( j=0;j<countD;j++){
+           if(strcasecmp(etudiant[i].Departement,TDepartement[j])==0) {
+           copmare = 0;
+           break;
+           }
+   }
+     if(copmare){
+        strcpy(TDepartement[countD],etudiant[i].Departement);
+        countD++;
+     }
+    }
+
+  for(i=0;i<countD;i++){
+     int countE = 0;
+
+        for(j=0;j<count;j++){
+            if(etudiant[j].NoteGeneral>=10 && strcasecmp(etudiant[j].Departement,TDepartement[i])==0){
+                countE++;
+            }
+        }
+        printf("\n");
+        printf("le nombre d'étudiants ayant reussi dans  departement %s est %d\n",TDepartement[i],countE);
+      }
+
+}
+
+//Rechercher
+void Rechercher(){
+
+    int i ;
+    char nomRecherche[30];
+
+   printf("***saisir le nom que vous voulez Rechercher");
+   scanf("%s",nomRecherche);
+
+   i=0;
+   while(i<count){
+    if(strcasecmp(etudiant[i].Nom,nomRecherche)==0){
+      printf("\n");
+      printf("------le numero unique est %d .\n",etudiant[i].Numero);
+      printf("------le nom de  est %s.\n",etudiant[i].Nom);
+      printf("------le prenome est %s \n",etudiant[i].Prenom);
+      printf("------Date de Naissance: %d/%d/%d\n",etudiant[i].date.jour,etudiant[i].date.jour,etudiant[i].date.jour);
+      printf("------Departement: %s\n", etudiant[i].Departement);
+      printf("------la note general : %.2f ",etudiant[i].NoteGeneral);
+
+    }
+    i++;
+   }
+
+}
+
+//la liste des étudiants inscrits dans un département spécifique
+void ListDepartement(){
+    int i ;
+       char departementRechercher[30] ;
+    printf("saisir le departement que vous voulez Rechercher : ");
+    scanf("%s",departementRechercher);
+    printf("-----les etudiants de departement %s :\n", departementRechercher);
+    for(i=0;i<count;i++){
+        if(strcasecmp(etudiant[i].Departement , departementRechercher )==0){
+            printf("\n");
+            printf("----%s %s %d \n",etudiant[i].Nom,etudiant[i].Prenom,etudiant[i].Numero);
+        }
+    }
+
+}
+
+void TrierAlphabetiqueAZ() {
+    int i, j;
+
+    char swap[30];
+    // Tri à bulles pour trier les noms dans l'ordre croissant (A à Z)
+    for (i = 0; i < count - 1; i++) {
+        for (j = 0; j < count - i - 1; j++) {
+            if (strcmp(etudiant[j].Nom, etudiant[j+1].Nom) > 0) {
+                // Si l'étudiant[j] est plus grand que l'étudiant[j+1], on échange leurs places
+              strcpy(swap,etudiant[j].Nom);
+                strcpy( etudiant[j].Nom, etudiant[j + 1].Nom);
+                strcpy( etudiant[j + 1].Nom, swap);
+
+
+            }
+        }
+    }
+
+
+    // Affichage des étudiants triés
+    printf("\nListe des etudiants triee de A à Z:\n");
+    for(i=0;i<count;i++) {
+        printf("Nom: %s, Prenom: %s\n", etudiant[i].Nom,etudiant[i].Prenom);
     }
 }
 
-for(i=0;i<3;i++){
-    printf("-- la note %d: %.2f \n",i+1,etudiant[i].NoteGeneral);
-        printf("Numero: %d\n", etudiant[i].Numero);
-        printf("Nom: %s\n", etudiant[i].Nom);
-        printf("Prenom: %s\n", etudiant[i].Prenom);
-        printf("Date de Naissance: %d/%d/%d\n",etudiant[i].date.jour,etudiant[i].date.jour,etudiant[i].date.jour);
-        printf("Departement: %s\n", etudiant[i].Departement);
+
+void TrierAlphabetiqueZA() {
+    int i, j;
+
+    char swap[30];
+
+    for (i = 0; i < count - 1; i++) {
+        for (j = 0; j < count - i - 1; j++) {
+            if (strcmp(etudiant[j].Nom, etudiant[j+1].Nom) < 0) {
+
+              strcpy(swap,etudiant[j].Nom);
+                strcpy( etudiant[j].Nom, etudiant[j + 1].Nom);
+                strcpy( etudiant[j + 1].Nom, swap);
+
+            }
+        }
+    }
+
+
+
+
+        printf("\n");
+    printf("\nListe des etudiants triee de Z à A:\n");
+    for(i=0;i<count;i++) {
+        printf("Nom: %s, Prenom: %s\n", etudiant[i].Nom,etudiant[i].Prenom);
+    }
 }
-
-
-
-}
-
-
-
-
-
-
-
 
 
 int main() {
@@ -244,19 +397,22 @@ int main() {
     int i ;
 
     do{
-     printf("\nMenu de gestion des Etudiants dans une universite :\n");
-         printf("1. Ajouter un etudiant\n");
-         printf("2. Modifier un etudiant\n");
-         printf("3. Supprimer un etudiant\n");
-         printf("4. Afficher \n");
-         printf("5. moyenne generale\n");
-         printf("6. statistiques\n");
-         printf("7. Rechercher\n");
-         printf("Entrez votre choix : ");
+         printf("\nMenu de gestion des Etudiants dans une universite :\n");
+         printf("       1. Ajouter un etudiant\n");
+         printf("       2. Modifier un etudiant\n");
+         printf("       3. Supprimer un etudiant\n");
+         printf("       4. Afficher \n");
+         printf("       5. moyenne generale\n");
+         printf("       6. statistiques\n");
+         printf("       7. Rechercher\n");
+         printf("       8. List d'etudiants\n");
+         printf("       9. Afficher le nom  de A a Z OU de Z a A \n");
+         printf("\n");
+         printf("--Entrez votre choix : ");
          scanf("%d", &choix);
 
 
-//    // Exécution des fonctions selon le choix
+
     switch(choix){
     case 1 :
     Ajouter();
@@ -274,18 +430,31 @@ int main() {
         CalculerDepartement();
         break;
     case 6 :
-        Statistiques();
+        printf("\n");
+        printf("le nomber total d'etudians inscrits est %d .\n",count);
+        EtudiantDepartement();
+        MoyenneSeuil();
+        MeilleuresNotes();
+        EtudiantReussiDepartement();
         break;
-
-
+    case 7 :
+        Rechercher();
+        break;
+    case 8 :
+        ListDepartement();
+        break;
+    case 9 :
+        TrierAlphabetiqueAZ();
+        TrierAlphabetiqueZA();
+        break;
 
     default :
      printf("il n'y a pas cette le nomber sur menu");
       break;
     }
 
-     printf(" est ce que vous-affichez le menu \n");
-     printf("si vollez-vous afficher le menu ,ecrivez 1 si non 0 :");
+     printf("***est ce que vous-affichez le menu*** \n");
+     printf("***si vollez-vous afficher le menu ,ecrivez 1 si non 0 :  ");
      scanf("%d",&repeat);
 
 
