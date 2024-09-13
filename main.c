@@ -4,7 +4,7 @@
 #define maxEtudiant 300
 
 struct DateNaissance{
-    int jour;
+     int jour;
     int mois;
     int annee;
 };
@@ -137,30 +137,41 @@ void Supprimer(){
 // Fonction pour calculer la moyenne par département et dans l'université
 void CalculerDepartement(){
 
-  char departement[30]; // Tableau pour stocker le nom du département saisi par l'utilisateur
-  float sommeD = 0;     // Somme des notes générales des étudiants du département choisi
-  float sommeU = 0 ;     // Somme des notes générales de tous les étudiants de l'université
-  int countEtudiant = 0 ; // Compteur du nombre d'étudiants dans le département choisi
-  int i;
+ char Tdepartement[50][30];
+ int i,j;
+ int countD = 0;
 
-  printf("saisir departement que vous vollez savoir la note generle :");
-  scanf("%s",departement);
-// Boucle pour parcourir tous les étudiants et vérifier leur département
-  for(i=0;i<count;i++){
-    if(strcasecmp(etudiant[i].Departement,departement)==0){
-        sommeD = sommeD + etudiant[i].NoteGeneral;
-        countEtudiant++;
+ int compare = 0 ;
+
+ for(i=0;i<count;i++){
+        compare = 1 ;
+       for(j=0;j<countD;j++){
+    if(strcmp(etudiant[i].Departement,Tdepartement[j]) == 0 ){
+        compare = 0;
+       break;
+        }
     }
+   if(compare){
+    strcpy(Tdepartement[countD],etudiant[i].Departement);
+    countD++;
+   }
+ }
+
+  for(i=0;i<countD;i++){
+     float somme = 0 ;
+     float moyenne ;
+     int countE = 0;
+        for(j=0;j<count;j++){
+          if(strcmp(etudiant[j].Departement,Tdepartement[i])==0){
+             somme = somme + etudiant[j].NoteGeneral;
+             countE++;
+          }
+        }
+            moyenne = somme / countE ;
+            printf("La note generale de ce departement - %s est %.2f.\n", Tdepartement[i],moyenne);
   }
 
-  printf("la note general depatement %s est %.2f",departement,sommeD / countEtudiant);
-
-  for(i=0;i<count;i++){
-    sommeU = sommeU + etudiant[i].NoteGeneral;
-  }
-  printf("la note general dans university est %2.f",sommeU/count);
 }
-
 //Statistique
 
 //le nombre d'étudiants dans chaque département.
@@ -168,14 +179,14 @@ void EtudiantDepartement(){
      int i ,j ;
    char TDepartement[maxEtudiant][30]; //un tableau pour stocker les noms des départements trouvés.
    int copmare ;
-    int countD = 0 ;
+   int countD = 0 ;
 
 
 
    for(i=0;i<count;i++){
      copmare=1;
      for( j=0;j<countD;j++){
-           if(strcasecmp(etudiant[i].Departement,TDepartement[j])==0) {
+           if(strcasecmp(etudiant[i].Departement,TDepartement[j])==0){
            copmare = 0;
            break;
            }
@@ -288,7 +299,7 @@ void EtudiantReussiDepartement(){
             }
         }
         printf("\n");
-        printf("le nombre d'étudiants ayant reussi dans  departement %s est %d\n",TDepartement[i],countE);
+        printf("le nombre d'etudiants ayant reussi dans  departement %s est %d\n",TDepartement[i],countE);
       }
 
 }
@@ -380,9 +391,7 @@ void TrierAlphabetiqueZA() {
     }
 
 
-
-
-        printf("\n");
+    printf("\n");
     printf("\nListe des etudiants triee de Z à A:\n");
     for(i=0;i<count;i++) {
         printf("Nom: %s, Prenom: %s\n", etudiant[i].Nom,etudiant[i].Prenom);
