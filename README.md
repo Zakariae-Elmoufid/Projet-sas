@@ -16,7 +16,7 @@ Ce projet est une application de gestion des étudiants dans une université. Il
 - **Trier par ordre alphabétique** : Trie les étudiants par leur nom de A à Z ou de Z à A.
 
 
-##remarque 
+## remarque 
 - Je vais faire des modifications sur ce projet pour l'améliorer,      basées sur les observations des formateurs.
 
 - Je compléterai deux fonctions de tri.
