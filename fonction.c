@@ -70,6 +70,9 @@ void Modifier(){
     for(i=0;i<count;i++){
         if(numeroUnique==etudiant[i].Numero){
     printf("Entrez la nouvelle d'information.\n");
+    printf("entrez le numero unique : ");
+    scanf("%d",&numeroUnique);
+    etudiant[i].Numero=numeroUnique;
     printf(" nom d'etudiant: ");
     scanf("%s",nom);
     strcpy(etudiant[i].Nom,nom);
@@ -107,12 +110,14 @@ void Supprimer(){
     for(i=0;i<count;i++){
         if(numeroUnique==etudiant[i].Numero){
             for(j=i;j<count-1;j++){
+                etudiant[j].Numero = etudiant[j+1].Numero;
                 strcpy(etudiant[j].Nom,etudiant[j+1].Nom);
                 strcpy(etudiant[j].Prenom,etudiant[j+1].Prenom);
                 etudiant[j].date.jour = etudiant[j+1].date.jour;
                 etudiant[j].date.mois = etudiant[j+1].date.mois;
                 etudiant[j].date.annee = etudiant[j+1].date.annee;
                 strcpy(etudiant[j].Departement,etudiant[j+1].Departement);
+                etudiant[j].NoteGeneral = etudiant[j+1].NoteGeneral;
             }
             count--;
             printf("supprimer avec succes.\n");
@@ -193,7 +198,7 @@ void EtudiantDepartement(){
             }
         }
         printf("\n");
-        printf("le nombre d'�tudiants dans %s est %d\n",TDepartement[i],countE);
+        printf("le nombre d'etudiants dans %s est %d\n",TDepartement[i],countE);
       }
 }
 
@@ -221,7 +226,7 @@ void MeilleuresNotes(){
     }
 
 for(i=0;i<count-1;i++){
-    for(j=0;j<count-1;j++){
+    for(j=0;j<count-i-1;j++){
             if(TMeilleures[j]<TMeilleures[j+1]){
         swap = TMeilleures[j];
         TMeilleures[j] = TMeilleures[j+1];
@@ -231,7 +236,7 @@ for(i=0;i<count-1;i++){
   }
 
   for(i=0;i<3&&i<count;i++)
-    {
+    { 
         int compare = 0 ;
         int index = 0 ;
 
@@ -244,7 +249,7 @@ for(i=0;i<count-1;i++){
             }
         }
 
-      if(compare)
+      if(compare){
         printf("\n");
         printf("------la note %d: %.2f \n",i+1,etudiant[index].NoteGeneral);
         printf("-Numero: %d\n", etudiant[index].Numero);
@@ -252,11 +257,11 @@ for(i=0;i<count-1;i++){
         printf("-Prenom: %s\n", etudiant[index].Prenom);
         printf("-Date de Naissance: %d/%d/%d\n",etudiant[index].date.jour,etudiant[index].date.jour,etudiant[index].date.jour);
         printf("-Departement: %s\n", etudiant[index].Departement);
-    }
+     }
 
 
 }
-
+}
 //nombre d'�tudiants ayant r�ussi dans chaque d�partement
 void EtudiantReussiDepartement(){
        int i ,j ;
@@ -287,7 +292,7 @@ void EtudiantReussiDepartement(){
             }
         }
         printf("\n");
-        printf("le nombre d'�tudiants ayant reussi dans  departement %s est %d\n",TDepartement[i],countE);
+        printf("le nombre d'etudiants ayant reussi dans  departement %s est %d\n",TDepartement[i],countE);
       }
 
 }
@@ -341,7 +346,7 @@ void TrierAlphabetiqueAZ() {
     // Tri � bulles pour trier les noms dans l'ordre croissant (A � Z)
     for (i = 0; i < count - 1; i++) {
         for (j = 0; j < count - i - 1; j++) {
-            if (strcmp(etudiant[j].Nom, etudiant[j+1].Nom) > 0) {
+            if (strcasecmp(etudiant[j].Nom, etudiant[j+1].Nom) > 0) {
                 // Si l'�tudiant[j] est plus grand que l'�tudiant[j+1], on �change leurs places
               strcpy(swap,etudiant[j].Nom);
                 strcpy( etudiant[j].Nom, etudiant[j + 1].Nom);
@@ -368,7 +373,7 @@ void TrierAlphabetiqueZA() {
 
     for (i = 0; i < count - 1; i++) {
         for (j = 0; j < count - i - 1; j++) {
-            if (strcmp(etudiant[j].Nom, etudiant[j+1].Nom) < 0) {
+            if (strcasecmp(etudiant[j].Nom, etudiant[j+1].Nom) < 0) {
 
               strcpy(swap,etudiant[j].Nom);
                 strcpy( etudiant[j].Nom, etudiant[j + 1].Nom);
@@ -381,10 +386,123 @@ void TrierAlphabetiqueZA() {
 
 
 
-        printf("\n");
+    printf("\n");
     printf("\nListe des etudiants triee de Z a A:\n");
     for(i=0;i<count;i++) {
         printf("Nom: %s, Prenom: %s\n", etudiant[i].Nom,etudiant[i].Prenom);
     }
 }
+//Tri des étudiants par moyenne générale, du plus élevé au plus faible ou inversement
+void TriEtudiantsMoyennePlusFaible(){
+    int i , j ;
+    float TNote[maxEtudiant];
+    float swap;
 
+      for (i =0;i<count;i++) {
+        TNote[i] = etudiant[i].NoteGeneral;
+    }
+    
+    for(i=0;i<count-1;i++){
+        for(j=0;j<count-i-1;j++){
+            if(TNote[j] < TNote[j+1]){
+                swap=TNote[j];
+                TNote[j]=TNote[j+1];
+                TNote[j+1]=swap;
+            }      
+        }
+     }
+     printf("\n");
+      printf("la moyenne generale des etudiants , du plus eleve au plus faible \n");
+     for(i=0;i<count;i++){
+        int nmb = 0;
+        int index = 0;
+        for(j=0;j<count;j++){
+            if(TNote[i]==etudiant[j].NoteGeneral){
+                nmb = 1 ;
+                index = j ; 
+                break;
+            }
+        }
+        if(nmb){
+           
+        printf("- | %d ", etudiant[index].Numero);
+        printf(" %s", etudiant[index].Nom);
+        printf(": %s", etudiant[index].Prenom);
+        printf("  %.2f \n",etudiant[index].NoteGeneral);
+        
+        }
+
+       }
+ }
+     
+  
+
+
+void TriEtudiantsMoyenneFaiblePlus(){
+   int i , j ;
+    float TNote[maxEtudiant];
+    float swap;
+
+      for (i =0;i<count;i++) {
+        TNote[i] = etudiant[i].NoteGeneral;
+    }
+    
+    for(i=0;i<count-1;i++){
+        for(j=0;j<count-i-1;j++){
+            if(TNote[j] > TNote[j+1]){
+                swap=TNote[j];
+                TNote[j]=TNote[j+1];
+                TNote[j+1]=swap;
+            }      
+        }
+     }
+     printf("\n");
+     printf("la moyenne generale des etdiants, du plus faible au plus eleve \n");
+     for(i=0;i<count;i++){
+        int nmb = 0;
+        int index = 0;
+        for(j=0;j<count;j++){
+            if(TNote[i]==etudiant[j].NoteGeneral){
+                nmb = 1 ;
+                index = j ; 
+                break;
+            }
+        }
+        if(nmb){
+        printf("- | %d ", etudiant[index].Numero);
+        printf(" %s", etudiant[index].Nom);
+        printf(": %s", etudiant[index].Prenom);
+        printf("%.2f \n",etudiant[index].NoteGeneral);
+        
+        }
+
+       }
+
+}
+
+// Tri des étudiants selon leur statut de réussite .
+
+void TriEtudiantSelonResussite(){
+    int i,j;
+    float swap ;
+
+    for(i=0;i<count-1;i++){
+        for(j=0;j<count-i-1;j++){
+           if(etudiant[j].NoteGeneral < etudiant[j+1].NoteGeneral){
+            swap = etudiant[j].NoteGeneral;
+            etudiant[j].NoteGeneral= etudiant[j+1].NoteGeneral;
+            etudiant[j+1].NoteGeneral = swap;
+           }
+        }
+    }
+    printf("Classement des etudiants selon leur statut de russite.\n");
+    for(i=0;i<count;i++){
+        if(etudiant[i].NoteGeneral>=10){
+           printf("- %d | ",etudiant[i].Numero);
+           printf(" %s %s : ",etudiant[i].Nom,etudiant[i].Prenom);
+           printf(" %.2f .\n",etudiant[i].NoteGeneral);
+        }
+    }
+
+
+}

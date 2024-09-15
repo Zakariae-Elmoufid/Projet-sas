@@ -22,6 +22,8 @@ int main() {
          printf("       7. Rechercher\n");
          printf("       8. List d'etudiants\n");
          printf("       9. Afficher le nom  de A a Z OU de Z a A \n");
+         printf("       10. Afficher  des etudiants par moyenne generale, du plus eleve au plus faible ou inversement.\n");
+         printf("        11. Classement des etudiants selon leur statut de russite\n");
          printf("\n");
          printf("--Entrez votre choix : ");
          scanf("%d", &choix);
@@ -62,6 +64,13 @@ int main() {
         TrierAlphabetiqueAZ();
         TrierAlphabetiqueZA();
         break;
+    case 10 :
+        TriEtudiantsMoyennePlusFaible();
+        TriEtudiantsMoyenneFaiblePlus();
+        break;    
+    case 11 :
+        TriEtudiantSelonResussite() ;
+        break;    
 
     default :
      printf("il n'y a pas cette le nomber sur menu");

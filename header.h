@@ -36,6 +36,9 @@ void Rechercher();
 void ListDepartement();
 void TrierAlphabetiqueAZ();
 void TrierAlphabetiqueZA();
+void TriEtudiantsMoyennePlusFaible();
+void TriEtudiantsMoyenneFaiblePlus();
+void TriEtudiantSelonResussite();
 
 
 #endif
